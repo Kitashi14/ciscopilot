@@ -13,14 +13,13 @@
     "onCommand:extension.ciscopilot-test.helloWorld",
     "onCommand:extension.ciscopilot-test.findVariableReferences",
     "onCommand:extension.ciscopilot-test.findDefinition",
-    "onCommand:extension.ciscopilot-test.listIncludedFiles",
-    "onCommand:extension.ciscopilot-test.listIncludedFiles2"
+    "onCommand:extension.ciscopilot-test.listIncludedFiles"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "chatParticipants": [
       {
-        "id": "ciscopilot-test.code-tutor",
+        "id": "ciscopilot-test.ciscopilot",
         "fullName": "Ciscopilot",
         "name": "ciscopilot",
         "description": "What can I teach you?",
@@ -28,6 +27,10 @@
         "commands": [
           {
             "name": "exercise",
+            "description": "Provide exercises to practice a concept."
+          },
+          {
+            "name": "test",
             "description": "Provide exercises to practice a concept."
           },
           {
@@ -52,10 +55,6 @@
       },
       {
         "command": "ciscopilot-test.listIncludedFiles",
-        "title": "List Included Files"
-      },
-      {
-        "command": "ciscopilot-test.listIncludedFiles2",
         "title": "List Imported Modules & Files"
       }
     ]
