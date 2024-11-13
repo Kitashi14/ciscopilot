@@ -1,0 +1,82 @@
+{
+  "name": "ciscopilot-test",
+  "displayName": "ciscopilot_test",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:extension.ciscopilot-test.helloWorld",
+    "onCommand:extension.ciscopilot-test.findVariableReferences",
+    "onCommand:extension.ciscopilot-test.findDefinition",
+    "onCommand:extension.ciscopilot-test.listIncludedFiles",
+    "onCommand:extension.ciscopilot-test.listIncludedFiles2"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "chatParticipants": [
+      {
+        "id": "ciscopilot-test.code-tutor",
+        "fullName": "Ciscopilot",
+        "name": "ciscopilot",
+        "description": "What can I teach you?",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "exercise",
+            "description": "Provide exercises to practice a concept."
+          },
+          {
+            "name": "listModules",
+            "description": "No promt needed, just enter see the recursive list of modules imported in current open file"
+          }
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "command": "ciscopilot-test.helloWorld",
+        "title": "Hello World"
+      },
+      {
+        "command": "ciscopilot-test.findVariableReferences",
+        "title": "Find Refercences"
+      },
+      {
+        "command": "ciscopilot-test.findDefinition",
+        "title": "Find Definations"
+      },
+      {
+        "command": "ciscopilot-test.listIncludedFiles",
+        "title": "List Included Files"
+      },
+      {
+        "command": "ciscopilot-test.listIncludedFiles2",
+        "title": "List Imported Modules & Files"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.95.0",
+    "@types/mocha": "^10.0.9",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.10.0",
+    "@typescript-eslint/parser": "^8.7.0",
+    "eslint": "^9.13.0",
+    "typescript": "^5.6.3",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1"
+  }
+}
