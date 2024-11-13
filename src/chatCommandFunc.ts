@@ -240,8 +240,8 @@ async function findAllImportedFiles(
     return isLspPresent || !imports.length ? fullImports : isLspPresent;
   }
   
-  export const listIncludedFilesFn = async () => {
-    const editor = vscode.window.activeTextEditor;
+  export const listIncludedFilesFn = async (workplace_editor: any) => {
+    const editor = workplace_editor;
     if (!editor) {
       vscode.window.showInformationMessage("No active editor found.");
       return false;

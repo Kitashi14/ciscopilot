@@ -13,7 +13,8 @@
     "onCommand:extension.ciscopilot-test.helloWorld",
     "onCommand:extension.ciscopilot-test.findVariableReferences",
     "onCommand:extension.ciscopilot-test.findDefinition",
-    "onCommand:extension.ciscopilot-test.listIncludedFiles"
+    "onCommand:extension.ciscopilot-test.listIncludedFiles",
+    "onCommand:extension.ciscopilot-test.viewImportTree"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -36,6 +37,10 @@
           {
             "name": "listModules",
             "description": "No promt needed, just enter see the recursive list of modules imported in current open file"
+          },
+          {
+            "name": "viewImportTree",
+            "description": "No promt needed, just enter"
           }
         ]
       }
@@ -56,10 +61,17 @@
       {
         "command": "ciscopilot-test.listIncludedFiles",
         "title": "List Imported Modules & Files"
+      },
+      {
+        "command": "ciscopilot-test.viewImportTree",
+        "title": "View Import Tree of current file"
       }
     ]
   },
   "scripts": {
+    "install:all": "npm install && cd webview-ui && npm install",
+    "dev:webview": "cd webview-ui && npm run dev",
+    "build:webview": "cd webview-ui && npm run build",
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
