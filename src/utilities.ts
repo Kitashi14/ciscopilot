@@ -1,4 +1,5 @@
 import { Uri, Webview } from "vscode";
+import * as vscode from "vscode";
 
 /**
  * A helper function which will get the webview URI of a given file or resource.
@@ -35,4 +36,22 @@ export function getNonce() {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
+}
+
+export function getValueObjectArrayFromMap(map: Map<any, any>) {
+  let arr: any[] = [];
+  map.forEach((value, key) => {
+    arr.push({ value });
+  });
+  return arr;
+}
+
+export async function openFileInEditor(path: string) {
+  const uri = vscode.Uri.file(path); // Replace with the path to your file
+  try {
+      const document = await vscode.workspace.openTextDocument(uri);
+      await vscode.window.showTextDocument(document, vscode.ViewColumn.Beside);
+  } catch (error: any) {
+      vscode.window.showErrorMessage(`Failed to open file: ${error.message}`);
+  }
 }

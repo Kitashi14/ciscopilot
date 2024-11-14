@@ -1,5 +1,7 @@
 import * as vscode from "vscode";
 import {
+	findDefinitionFn,
+	findReferencesFn,
   listIncludedFilesFn,
   participantCommandFn,
   streamInportedModules,
@@ -28,7 +30,11 @@ export const ciscopilotHandler: vscode.ChatRequestHandler = async (
     const modulesData = await listIncludedFilesFn(vscode.window.activeTextEditor);
     console.log(modulesData);
     streamInportedModules(modulesData, stream);
-  } else if (request.command === "test") {
+  } else if (request.command === "findReferences") {
+    await findReferencesFn(stream);
+  }  else if (request.command === "findDefination") {
+    await findDefinitionFn(stream);
+  }  else if (request.command === "test") {
     // Get the active text editor
     const editor = vscode.window.activeTextEditor;
     if (editor) {

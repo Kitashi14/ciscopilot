@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from "path";
 import { languagesSupported } from './extension';
+import exp from 'constants';
 
 export const participantCommandFn = async (request: vscode.ChatRequest, context: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken, prompt: string) => {
 	// initialize the messages array with the prompt
@@ -236,8 +237,8 @@ async function findAllImportedFiles(
         }
       }
     }
-    // if LSP is not present for the language, return false otherwise return the full imports array
-    return isLspPresent || !imports.length ? fullImports : isLspPresent;
+    // if LSP is not present and there are modules present for the language, return false otherwise return the full imports array
+    return !isLspPresent && imports.length ? false : fullImports.sort((a,b)=> (a.isUserDefined && !b.isUserDefined)? -1: 1);
   }
   
   export const listIncludedFilesFn = async (workplace_editor: any) => {
@@ -263,6 +264,7 @@ async function findAllImportedFiles(
     const rootFile = {
       rootPath: filePath,
       languageId,
+      rootFileName: fileName,
     };
     const modulesFound = new Map<string, any>();
     const allImports = await findAllImportedFiles(rootFile, modulesFound);
@@ -444,4 +446,78 @@ export const streamInportedModules = (modulesData: any, stream: vscode.ChatRespo
 		}
 	}
 	console.log(modulesData.rootFile.languageId);
+}
+
+export const findReferencesFn = async (stream: vscode.ChatResponseStream)=>{
+
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    console.log("No active text editor");
+    return;
+  }
+
+  const position = editor.selection.active;
+  console.log("position of cursor: ", position);
+  //   const location = '/Users/rishara2/Downloads/src/context/dataContext.js'; // Example location
+  //   const document = await vscode.workspace.openTextDocument(vscode.Uri.file(location));
+  const document = editor.document;
+  const fileContent = document.getText();
+  const filePath = document.fileName;
+  const fileName = path.basename(filePath);
+  const languageId = document.languageId;
+
+  const references = await vscode.commands.executeCommand<
+    vscode.Location[]
+  >("vscode.executeReferenceProvider", document.uri, position);
+  const wordRange = document.getWordRangeAtPosition(position);
+  const word = document.getText(wordRange);
+  console.log("keyword: ", word);
+  console.log("filename: ", fileName);
+  console.log("filepath: ", filePath);
+  console.log("prog language: ", languageId);
+  // console.log(fileContent);
+  stream.markdown('### Showing all references for: \n');
+  stream.markdown(`    ${word}`);
+  stream.markdown("\n");
+  stream.anchor(vscode.Uri.file(filePath));
+  stream.markdown("\n\n");
+  console.log("references: ", references);
+  if (references && references.length > 0) {
+    references.forEach((reference) => {
+      console.log("reference: ", reference);
+      const line = reference.range.start.line;
+      const file = reference.uri.path
+      console.log(`Variable referenced at line: ${line + 1}, file: ${file}`);
+    });
+  }else{
+    console.log("No references found.");
+    stream.markdown("No references found.");
+  }
+  
+  console.log("\n");
+}
+
+export const findDefinitionFn = async (stream: vscode.ChatResponseStream)=>{
+  const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+          vscode.window.showInformationMessage("No active editor found.");
+          return;
+        }
+
+        const position = editor.selection.active;
+        const document = editor.document;
+        console.log("document: ", document);
+        console.log("file path: ", document.uri);
+
+        const definitions: any = await vscode.commands.executeCommand<
+          vscode.Location[]
+        >("vscode.executeDefinitionProvider", document.uri, position);
+        console.log("definitions: ", definitions);
+        if(definitions && definitions.length > 0){
+          console.log(definitions[0].targetUri);
+        }else{
+          console.log("No definition found.");
+          stream.markdown("No definition found.");
+        }
+        
 }

@@ -6,7 +6,7 @@ import {
   Uri,
   ViewColumn,
 } from "vscode";
-import { getNonce, getUri } from "../utilities";
+import { getNonce, getUri, getValueObjectArrayFromMap, openFileInEditor } from "../utilities";
 import { listIncludedFilesFn } from "../chatCommandFunc";
 import { WORKPLACE_EDITOR } from "../extension";
 
@@ -137,7 +137,7 @@ export class ViewImportTreePanel {
         <head>
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}' 'unsafe-inline';">
           <link rel="stylesheet" type="text/css" href="${stylesUri}">
           <title>CISCOPILOT</title>
         </head>
@@ -160,17 +160,29 @@ export class ViewImportTreePanel {
     webview.onDidReceiveMessage(
       async (message: any) => {
         const command = message.command;
-        const text = message.text;
+        const data = message.data;
 
         switch (command) {
           case "ready":
             console.log("ready");
             const modulesData = await listIncludedFilesFn(WORKPLACE_EDITOR);
-            console.log(modulesData);
-            webview.postMessage({command: "showImportModules", data: modulesData});
+            var sendData = null;
+            if(modulesData && modulesData.allImports.length){
+              sendData = {
+                rootFile: modulesData.rootFile,
+                allImports: modulesData.allImports,
+                moduleFound: getValueObjectArrayFromMap(modulesData.modulesFound)
+              }
+            }
+            console.log(sendData);
+            webview.postMessage({command: "showImportModules", data: sendData});
 
             // Code that should run in response to the hello message command
             return;
+          case "openFile":
+            console.log("openFile");
+            openFileInEditor(data);
+
           // Add more switch case statements here as more webview message commands
           // are created within the webview context (i.e. inside media/main.js)
         }

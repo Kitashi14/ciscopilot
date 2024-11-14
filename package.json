@@ -39,6 +39,14 @@
             "description": "No promt needed, just enter see the recursive list of modules imported in current open file"
           },
           {
+            "name": "findReferences",
+            "description": "No promt needed, just keep your cursor on the variable and enter"
+          },
+          {
+            "name": "findDefination",
+            "description": "No promt needed, just keep your cursor on the variable and enter"
+          },
+          {
             "name": "viewImportTree",
             "description": "No promt needed, just enter"
           }
