@@ -23,27 +23,15 @@
         "id": "ciscopilot-test.ciscopilot",
         "fullName": "Ciscopilot",
         "name": "ciscopilot",
-        "description": "What can I teach you?",
+        "description": "Hi codrer, I am ciscopilot, your assistant for today. I can help you with finding references, definations, list imported modules and view import tree of current file. Just enter the command and I will do the rest for you.",
         "isSticky": true,
         "commands": [
-          {
-            "name": "exercise",
-            "description": "Provide exercises to practice a concept."
-          },
-          {
-            "name": "test",
-            "description": "Provide exercises to practice a concept."
-          },
           {
             "name": "listModules",
             "description": "No promt needed, just enter see the recursive list of modules imported in current open file"
           },
           {
             "name": "findReferences",
-            "description": "No promt needed, just keep your cursor on the variable and enter"
-          },
-          {
-            "name": "findDefination",
             "description": "No promt needed, just keep your cursor on the variable and enter"
           },
           {

@@ -488,6 +488,9 @@ export const findReferencesFn = async (stream: vscode.ChatResponseStream)=>{
       const line = reference.range.start.line;
       const file = reference.uri.path
       console.log(`Variable referenced at line: ${line + 1}, file: ${file}`);
+      stream.markdown(`- **Line:** ${line + 1} in file: `);
+      stream.anchor(vscode.Uri.file(file));
+      stream.markdown("\n");
     });
   }else{
     console.log("No references found.");
